@@ -1,0 +1,2 @@
+/*! XMAdmin2016 v0.0.1 | (c) 2015 Jerry */
+define("modules/mousewheel",["jQuery","log","jquery-mousewheel"],function(e,o,u){var n=e("jQuery"),l=e("log"),d=l.log,i=l.error;return"undefined"==typeof n||"undefined"==typeof n.fn||"string"!=typeof n.fn.jquery?void i("Can not find jQuery."):(l.$(),d("Module Mousewheel is loading..."),e("jquery-mousewheel"),"undefined"==typeof n.fn.mousewheel?i("Failed to load Module Mousewheel."):d("Module Mousewheel is loaded, version:",n.event.special.mousewheel.version),void(u.exports=n))});

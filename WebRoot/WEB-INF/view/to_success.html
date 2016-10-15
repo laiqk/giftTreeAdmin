@@ -1,0 +1,29 @@
+#header()
+<head>
+<link rel="stylesheet" href="$admurl/dist/css/new.css">
+
+</head>
+<ol class="breadcrumb">
+	<li><a href="$admurl/admin/welcome.html">首页</a></li>
+	<li>资金管理</li>
+	<li class="active">跳转</li>
+</ol>
+<div class="wrap">
+	#if($!code == 1)
+	<div class="icon success"></div>
+	#else
+	<div class="icon fail"></div>
+	#end
+	<div class="new-d">
+		<span>$!{msg}</span>
+		<span>倒计时</span><span id="timer" data-url="$admurl/$!{returnURL}" data-seconds="3">3</span><span>秒</span>
+	</div>
+	<br>
+	<div class="new-btn">
+		<a href="$admurl/$!{returnURL}" class="btn login">直接跳转</a>
+	</div>
+</div>
+
+<script>seajs.use('main/jump');</script>
+
+#footer()

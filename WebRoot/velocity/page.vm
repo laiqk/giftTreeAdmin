@@ -1,0 +1,66 @@
+#macro(pagination $page $formname)
+
+	<script type="text/javascript" >
+
+	function formsub(page){
+		$("#page").val(page);
+		$("#${formname}").submit();
+	}
+	</script>
+
+	#if($!{page.getResult().size()} >0 )
+	#set($cnn=$page.totalPage)
+	#set($cnn2=$page.totalPage )
+	#set($listnum = ($page.linkPageNumbers.size() - 1))
+	<nav class="text-center">
+		<ul class="pagination">
+		<input name="topPrevious" id="topPrevious" type="hidden" value="$page.previousPageNumber"/>
+			#if($page.thisPageNumber > 1)
+			<li>
+				<a onclick="javascript:formsub($page.previousPageNumber);"><span>&laquo;</span></a>
+			</li>
+			#else
+			<li>
+				<a><span>&laquo;</span></a>
+			</li>
+			#end
+			
+			#if($page.thisPageNumber > 7)
+			<li>
+				<a onclick="javascript:formsub(1);"><span>1</span></a>
+			</li>
+			#if($page.thisPageNumber > 8)
+			<li>
+				<a><span>...</span></a>
+			</li>
+			#end
+			#end
+			
+			#foreach( $linkPageNumber in [$page.linkPageNumbers.get(0)..$page.linkPageNumbers.get($listnum)] )
+				#if($linkPageNumber==$page.thisPageNumber)
+					<li class="active"><a>$linkPageNumber</a></li>
+				#else
+					<li><a onclick="javascript:formsub($!linkPageNumber);" >$linkPageNumber</a></li>
+				#end
+			#end	
+			#if(($totalPage - $page.thisPageNumber) > 5)
+			<li>
+				<a><span>...</span></a>
+			</li>
+			#end
+			#if(($totalPage - $page.thisPageNumber) > 4)
+				<li>
+					<a href="javascript:formsub($totalPage);"><span>$totalPage</span></a>
+				</li>
+			#end
+			#if($page.thisPageNumber == $totalPage)
+			<li>
+				<a><span>&raquo;</span></a>
+			</li>
+			#else
+			<li><a onclick="javascript:formsub($page.nextPageNumber);"><span>&raquo;</span></a></li>
+			#end
+		</ul>
+	</nav>	
+	#end
+#end

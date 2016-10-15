@@ -1,0 +1,121 @@
+#header()
+<script type="text/javascript" src="${admurl}/public/rooms/My97DatePicker/WdatePicker.js"></script>
+<ol class="breadcrumb">
+	<li><a href="$admurl/admin/welcome.html">首页</a></li>
+	<li>用户管理</li>
+	<li class="active">统计查询页面</li>
+</ol>
+<div class="">
+	<form id="userForm" name="userForm" action="$admurl/admin/member/registerSource.html" class="navbar-form">
+		<input type="hidden" id="page" name="page" #if($!page) value="$page" #else value="1" #end /> <input type="hidden" id="ctype" name="ctype" value="$!ctype" />
+		<div class="form-group">
+			用户名: <input type="text" class="form-control" placeholder="用户名" name="username" id="username" value="$!username">
+			来源: <input type="tel" class="form-control"  name="sourceExtend" id="sourceExtend" value="$!sourceExtend">
+			是否投资:
+			<select class="form-control" name="status" id="status">
+				<option #if($!status== '1') selected="selected" #end value="1">是</option>
+				<option #if($!status== '') selected="selected" #end value="">全部</option>
+				<option #if($!status== '0') selected="selected" #end value="0">否</option>
+			</select><br><br>
+			注册时间： <input type="text" id="startTime" name="startTime" class="form-control" value="$!startTime" onclick="WdatePicker({errDealMode:1,el:'startTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+			到： <input type="text" id="endTime" name="endTime" class="form-control" value="$!endTime" onclick="WdatePicker({errDealMode:1,el:'endTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+			&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-default">搜索</button>
+			&nbsp;&nbsp;&nbsp;<a onclick="exportxls()">导出EXCEL</a><br><br>
+		</div>
+		<br>
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>用户名</th>
+					<th>手机号</th>
+					<th>真实姓名</th>
+					<th>身份证</th>
+					<th>注册时间（时分秒）</th>
+					<th>注册来源</th>
+					<th>首次投资时间</th>
+					<th>首次投资金额</th>
+					<th>二次投资时间</th>
+					<th>二次投资金额</th>
+					<th>累计投资金额</th>
+					<th>投资来源</th>
+					<th>投资状态</th>
+				</tr>
+			</thead>
+			<tbody>
+				#foreach($user in ${userpage.result})
+				<tr>
+					<td>$!user.id</td>
+					<td>$!user.username</td>
+					<td>$!user.mobile</td>
+					<td>$!user.realname</td>
+					<td>$!user.idCard</td>
+					#if($!user.createdAt)
+					<td>$!dateTool.dateStr($!user.createdAt, 'yyyy-MM-dd HH:mm:ss')</td>
+					#else
+					<td></td>
+					#end
+					<td>$!user.sourceExtend</td>
+					#if($!user.firstTenderTime)
+					<td>$!dateTool.dateStr($!user.firstTenderTime, 'yyyy-MM-dd HH:mm:ss')</td>
+					#else
+					<td></td>
+					#end
+					<td>$!user.firstTenderAccount</td>
+					#if($!user.secondTenderTime)
+					<td>$!dateTool.dateStr($!user.secondTenderTime, 'yyyy-MM-dd HH:mm:ss')</td>
+					#else
+					<td></td>
+					#end
+					<td>$!user.secondTenderAccount</td>
+					<td>$!user.totalTenderAccount</td>
+					<td>$!user.tSourceExtend</td>
+     				#if($!user.totalTenderAccount>0)
+     					<td>已投资</td>
+					#else
+						<td>未投资</td>
+					#end
+				</tr>
+				#end
+			</tbody>
+		</table>
+		<font color="red">$!verifysize</font>
+		#pagination($userpage 'userForm')
+	</form>
+</div>
+
+<script type="text/javascript">
+	var xlsurl = ROOT_URL + '/admin/member/registerSource.html?ctype=export';
+	function exportxls() {
+		var sou = "";
+		var username = $("#username").val();
+		if (username != null && username != "" && username != "undefine") {
+			sou += "&username=" + username;
+		}
+		var sourceExtend = $("#sourceExtend").val();
+		if (sourceExtend != null && sourceExtend != "" && sourceExtend != "undefine") {
+			sou += "&sourceExtend=" + sourceExtend;
+		}
+		var status = $("#status").val();
+		if (status != null && status != "" && status != "undefine") {
+			if(status==0)
+				sou += "&status_no=" + status;
+			else
+				sou += "&status=" + status;
+		}
+		var startTime = $("#startTime").val();
+		if (startTime != null && startTime != "" && startTime != "undefine") {
+			sou += "&startTime=" + startTime;
+		}
+		var endTime = $("#endTime").val();
+		if (endTime != null && endTime != "" && endTime != "undefine") {
+			sou += "&endTime=" + endTime;
+		}
+		if (sou != "") {
+			location.href = xlsurl + sou;
+		} else {
+			location.href = xlsurl;
+		}
+	}
+</script>
+#footer()

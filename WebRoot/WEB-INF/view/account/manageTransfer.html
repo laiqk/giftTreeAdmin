@@ -1,0 +1,72 @@
+#header()
+<script type="text/javascript" src="${admurl}/public/rooms/My97DatePicker/WdatePicker.js"></script>
+<ol class="breadcrumb">
+	<li><a href="$admurl/admin/welcome.html">首页</a></li>
+	<li>资金管理</li>
+	<li class="active">商户转账</li>
+</ol>
+<div class="">
+	<form id="manageTransferForm" name="manageTransferForm" action="$admurl/chinapnr/manageTransfer.html" class="navbar-form" onsubmit="return transferCheck()">
+		<div class="form-group">
+			商户标识: <input type="text" class="form-control" placeholder="商户标识" name="outCustId" id="outCustId">
+			用户名: <input type="text" class="form-control" placeholder="用户名" name="transferUser" id="transferUser">
+			金额: <input type="text" class="form-control" placeholder="金额" name="transferMoney" id="transferMoney" onkeyup="checkNum(this)">
+			<button type="submit" class="btn btn-default">发放</button>
+		</div>
+	</form>
+	<form id="manageTransferSearchForm" name="manageTransferSearchForm" action="$admurl/admin/search/manageTransfer.html" class="navbar-form">
+		<input type="hidden" id="page" name="page" #if($!page) value="$page" #else value="1" #end />
+		<div class="form-group">
+			用户名: <input type="text" class="form-control" placeholder="用户名" name="transferUser" id="transferUser" value="$!transferUser" >
+			金额: <input type="text" class="form-control" placeholder="金额" name="transferMoney" id="transferMoney" value="$!transferMoney" onkeyup="checkNum(this)">
+			发放时间： <input type="text" id="startTime" name="startTime" class="form-control" value="$!startTime" onclick="WdatePicker({errDealMode:1,el:'startTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+			到： <input type="text" id="endTime" name="endTime" class="form-control" value="$!endTime" onclick="WdatePicker({errDealMode:1,el:'endTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+			&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-default">搜索</button>
+		</div>
+		<br>
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>   
+					<th>用户名</th>
+					<th>真实姓名</th>
+					<th>现金红包</th>
+					<th>发放时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				#foreach($manageTransfer in ${searchPage.result})
+				<tr>
+					<td>$!manageTransfer.username</td>
+					<td>$!manageTransfer.realname</td>
+					<td>$!manageTransfer.transferMoney</td>
+					#if($!manageTransfer.createdAt)
+					<td>$!dateTool.dateStr($!manageTransfer.createdAt, 'yyyy-MM-dd HH:mm:ss')</td>
+					#else
+					<td></td>
+					#end
+				</tr>
+				#end
+			</tbody>
+		</table>
+		#pagination($searchPage 'manageTransferSearchForm')
+	</form>
+</div>
+ <script type="text/javascript">
+function transferCheck() {
+	if(confirm("确认发放？")){ 
+			return true;
+		}
+		return false;
+}
+ function checkNum(moneyObj){//判断金额数字等输入 上面侧边栏公用的时候，把这部分js也一起带走
+	   	if (isNaN(moneyObj.value)) {
+	   		alert("请输入正确数字！");
+	     }
+	     if (moneyObj != null) {//检查小数点后是否多于两位
+	         if (moneyObj.value.toString().split(".").length > 1 && moneyObj.value.toString().split(".")[1].length > 2) {
+	             alert("小数点后多于两位！");
+	         }
+	     }
+	 }
+</script>
+#footer()

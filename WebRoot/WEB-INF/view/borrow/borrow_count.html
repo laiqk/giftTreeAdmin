@@ -1,0 +1,68 @@
+#header()
+	<ol class="breadcrumb">
+	  <li><a href="$admurl/admin/welcome.html">首页</a></li>
+	  <li>运营管理</li>
+	</ol>
+	<div class="">
+	    <br>
+	    <br>		
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>标的总数</th>
+					<th>已还清数</th>
+					<th>逾期个数</th>
+					<th>投标中个数</th>
+					<th>还款中个数</th>
+					<th>流标个数</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>$!borrowCount</td>
+					<td>$!repaymentYesCount</td>
+					<td>$!lateCount</td>
+					<td>$!tenderCount</td>
+					<td>$!repaymentCount</td>
+					<td>$!overdueCount</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		
+	</div>
+	#if($!msg)
+	<script type="text/javascript">swal("$!msg")</script>
+	#end
+	<script type="text/javascript">
+		var xlsurl = 'admin/borrow/all_tender_list.html?type=export';
+		function exportxls(){
+					var sou = "";
+					var username = $("#username").val();
+					if (username!=""){
+						sou += "&username="+username;
+					}
+					var borrowname = $("#borrowname").val();
+					if (borrowname!=""){
+						sou += "&borrowname="+borrowname;
+					}
+					var startTime = $("#startTime").val();
+					if (startTime!=null&&startTime!=""&&startTime!="undefine"){
+						sou += "&startTime="+startTime;
+					}
+					var endTime = $("#endTime").val();
+					if (endTime!=null&&endTime!=""&&endTime!="undefine"){
+						sou += "&endTime="+endTime;
+					}
+					var money = $("#money").val();
+					if (money!=""){
+						sou += "&money="+money;
+					}
+					if (sou!=""){
+						location.href=xlsurl+sou;
+					}else{
+						location.href=xlsurl;
+					}					
+				}
+	</script>
+#footer()

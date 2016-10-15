@@ -1,0 +1,127 @@
+#header()
+	<ol class="breadcrumb">
+	  <li><a href="$admurl/admin/welcome.html">首页</a></li>
+	  <li>理财管理</li>
+	  <li><a href="$admurl/admin/borrow/list.html">产品列表</a></li>
+	  #if($!opt=='view')
+	  <li class="active">查看理财产品</li>
+	  #else
+	  <li class="active">发布理财产品</li>
+	  #end
+	</ol>
+	<div class="">
+		<form class="form-horizontal" action="$admurl/admin/borrow/opborrow.html" method="post">
+		  <input type="hidden" id="opt" name="opt" value="$!opt">
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">借款标题:</label>
+		    <div class="col-sm-3">
+		    	<p class="form-control-static">$!borrow.name</p>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">借款类型:</label>
+		    <div class="col-sm-3">
+		    	<p class="form-control-static">$!statusTool.getBorrowTypeName($!borrow.borrowType)</p>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">还款方式:</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static">$!statusTool.getBorrowRepaymentStyle($!borrow.repaymentStyle)</p>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">是否天标:</label>
+		    <div class="col-sm-3">
+				<p class="form-control-static">#if($!borrow.isDay==1) 是 #else 否 #end</p>
+		    </div>
+		  </div>		  		  		  		  
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">借款金额:</label>
+		    <div class="col-sm-3">
+		    	<p class="form-control-static">$!borrow.account</p>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">年利率:</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static">$!borrow.apr %</p>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">借款期限</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static">$!borrow.timeLimit #if($!borrow.isDay==1)天 #else 月 #end</p>
+		    </div>
+		  </div>		  	
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">最低投标金额:</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static">$!borrow.lowestAccount</p>
+		    </div>
+		  </div>	
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">最高投标金额:</label>
+		    <div class="col-sm-3">
+		    	<p class="form-control-static">$!borrow.mostAccount</p>
+		    </div>
+		  </div>	
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">募集开始时间:</label>
+		    <div class="col-sm-3">
+		    	<p class="form-control-static">$!dateTool.dateStr($!borrow.publishDate,'yyyy-MM-dd HH:mm:ss')</p>
+		    </div>
+		  </div>	  	  
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">借款手续费:</label>
+		    <div class="col-sm-3">
+		    	<p class="form-control-static">$!borrow.borrowFeeApr</p>
+		    </div>
+		  </div>		  	  
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">有效时间:</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static">$!borrow.validTime</p>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">优先级:</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static">
+				#if($!borrow.boOrder==1) 特级
+				#elseif($!borrow.boOrder==2) 1级
+				#elseif($!borrow.boOrder==3) 2级
+				#elseif($!borrow.boOrder==4) 3级
+				#else($!borrow.boOrder==5) 4级
+				#end
+		      </p>
+		    </div>
+		  </div>		    		  		  
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">项目介绍:</label>
+		    <div class="col-sm-3">
+				$!borrow.content
+		    </div>
+		  </div>		  		  
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">安全保障:</label>
+		    <div class="col-sm-3">
+				$!borrow.insurance
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">审核信息:</label>
+		    <div class="col-sm-3">
+				$!borrow.verifyRemark
+		    </div>
+		  </div>		  		  
+		  <div class="form-group">
+		    <div class="col-sm-offset-2 col-sm-10">
+				<button type="button" class="btn btn-primary" onclick="javascript:history.go(-1);">返回</button>
+				<!-- <a  class="btn btn-primary"  href="$admurl/admin/borrow/uppic.html?borrowId=$!borrow.id">图片上传</a> -->
+		    </div>
+		  </div>
+		</form>
+	</div>
+	
+#footer()

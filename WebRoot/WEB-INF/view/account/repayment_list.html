@@ -1,0 +1,79 @@
+#header()
+<script type="text/javascript" src="${admurl}/public/rooms/My97DatePicker/WdatePicker.js"></script>
+<ol class="breadcrumb">
+	<li><a href="$admurl/admin/welcome.html">首页</a></li>
+	<li>资金管理</li>
+	<li class="active">还款明细</li>
+</ol>
+<div class="">
+	<form id="repaymentForm" name="repaymentForm" action="$admurl/admin/account/repayment_list.html" class="navbar-form">
+		<input type="hidden" id="page" name="page" #if($!page) value="$page" #else value="1" #end />
+		<div class="form-group">
+			项目名称: <input type="text" class="form-control" placeholder="标名" name="borrowname" id="borrowname" value="$!borrowname">
+			<button type="submit" class="btn btn-default">搜索</button>
+			&nbsp;&nbsp;&nbsp;<a onclick="exportxls()">导出EXCEL</a><br><br>
+		</div>
+		<br>
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>客户ID</th>
+					<th>用户名</th>
+					<th>姓名</th>
+					<th>项目名称</th>
+					<th>项目金额</th>
+					<th>利率</th>
+					<th>客户投资金额</th>
+					<th>回款利息</th>
+					<th>回款本金</th>
+					<th>回款本息</th>
+					<th>还款方式</th>
+					<th>回款时间（时分秒）</th>
+				</tr>
+			</thead>
+			<tbody>
+				#foreach($bcollection in ${borrowCollectionPage.result})
+				<tr>
+					<td>$!bcollection.userId</td>
+					<td>$!bcollection.username</td>
+					<td>$!bcollection.realname</td>
+					<td>$!bcollection.borrowname</td>
+					<td>$!bcollection.borrowaccount</td>
+					<td>$!bcollection.borrowapr</td>
+					<td>$!bcollection.tenderaccount</td>
+					<td>$!bcollection.interest</td>
+					<td>$!bcollection.capital</td>
+					<td>$!bcollection.repayAccount</td>
+					#if($!bcollection.repaymentStyle==2)
+					<td>到期还本还息</td>
+					#else
+					<td></td>
+					#end
+					#if($!bcollection.updatetime)
+					<td>$!dateTool.dateStr($!bcollection.repayYestime, 'yyyy-MM-dd HH:mm:ss')</td>
+					#else
+					<td></td>
+					#end
+				</tr>
+				#end
+			</tbody>
+		</table>
+		#pagination($borrowCollectionPage 'repaymentForm')
+	</form>
+</div>
+<script type="text/javascript">
+	var xlsurl = ROOT_URL + '/admin/account/repayment_list.html?type=export';
+	function exportxls() {
+		var sou = "";
+		var borrowname = $("#borrowname").val();
+		if (borrowname != "") {
+			sou += "&borrowname=" + borrowname;
+		}
+		if (sou != "") {
+			location.href = xlsurl + sou;
+		} else {
+			location.href = xlsurl;
+		}
+	}
+</script>
+#footer()

@@ -1,0 +1,84 @@
+.dib-wrap {
+  font-size: 0;
+}
+.dib-wrap > .dib {
+  font-size: 12px;
+  vertical-align: top;
+  letter-spacing: normal;
+  word-spacing: normal;
+}
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .dib-wrap {
+    letter-spacing: -5px;
+  }
+}
+.dib {
+  display: inline-block;
+}
+#data-show {
+  width: 1160px;
+  height: 140px;
+  margin-bottom: 56px;
+}
+#data-show > .dib {
+  position: relative;
+  width: 278px;
+  height: 140px;
+  margin-left: 14px;
+}
+#data-show > .dib:first-child {
+  margin-left: 0;
+}
+#data-show > .dib > div:first-child {
+  padding: 14px;
+  height: 105px;
+}
+#data-show > .dib > div:first-child > span {
+  font-size: 12px;
+  color: white;
+}
+#data-show > .dib > div:first-child > div {
+  font-size: 36px;
+  color: white;
+}
+#data-show > .dib > div:first-child + div {
+  color: white;
+  padding-left: 14px;
+  padding-right: 14px;
+  height: 35px;
+  line-height: 35px;
+}
+#data-show > .dib > .data-show-graph {
+  position: absolute;
+  top: 13px;
+  right: 14px;
+  width: 130px;
+  height: 60px;
+}
+#data-show > .dib > .data-show-graph rect:hover {
+  fill-opacity: 0.6;
+}
+.bg-p2-green {
+  background-color: #16c98d !important;
+}
+.bg-p2-darkgreen {
+  background-color: #1ca074 !important;
+}
+.bg-p2-blue {
+  background-color: #00a3dc !important;
+}
+.bg-p2-darkblue {
+  background-color: #0b7296 !important;
+}
+.bg-p2-yellow {
+  background-color: #ffc100 !important;
+}
+.bg-p2-darkyellow {
+  background-color: #c99d13 !important;
+}
+.bg-p2-purple {
+  background-color: #684e79 !important;
+}
+.bg-p2-darkpurple {
+  background-color: #56366a !important;
+}

@@ -1,0 +1,108 @@
+#header()
+<script type="text/javascript" src="${admurl}/public/rooms/My97DatePicker/WdatePicker.js"></script>
+<ol class="breadcrumb">
+	<li><a href="$admurl/admin/welcome.html">首页</a></li>
+	<li>理财管理</li>
+	<li class="active">未还款</li>
+</ol>
+<div class="">
+	<form id="borrowRepaymentForm" name="borrowRepaymentForm" action="$admurl/admin/borrow/no_repayment_list.html" class="navbar-form" method="post">
+		<input type="hidden" id="page" name="page" #if($!page) value="$page" #else value="1" #end />
+		<div class="form-group">
+			还款人: <input type="text" class="form-control" placeholder="用户名" id="username" name="username" value="$!username">
+			项目名称: <input type="text" class="form-control" placeholder="项目名称" id="borrowName" name="borrowName" value="$!borrowName">
+			放款开始时间： <input type="text" id="loanStartTime" name="loanStartTime" class="form-control" placeholder="放款开始时间" value="$!loanStartTime" onclick="WdatePicker({errDealMode:1,el:'loanStartTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+			放款结束时间： <input type="text" id="loanEndTime" name="loanEndTime" class="form-control" placeholder="放款结束时间" value="$!loanEndTime" onclick="WdatePicker({errDealMode:1,el:'loanEndTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})"><br><br>
+			应还款开始时间： <input type="text" id="repaymentStartTime" name="repaymentStartTime" class="form-control" placeholder="应还款开始时间" value="$!repaymentStartTime" onclick="WdatePicker({errDealMode:1,el:'repaymentStartTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+			应还款结束时间： <input type="text" id="repaymentEndTime" name="repaymentEndTime" class="form-control" placeholder="应还款结束时间" value="$!repaymentEndTime" onclick="WdatePicker({errDealMode:1,el:'repaymentEndTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+			&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-default">搜索</button>
+			&nbsp;&nbsp;&nbsp;<a onclick="exportxls()">导出EXCEL</a><br><br>
+		</div>
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>编号</th>
+					<th>项目名称</th>
+					<th>还款人</th>
+					<th>应还款金额</th>
+					<th>放款时间</th>
+					<th>应还款时间</th>
+					<th>应还款利息</th>
+					<th>逾期天数</th>
+					<th>逾期费用</th>
+				</tr>
+			</thead>
+			<tbody>
+				#foreach($borrowRepayment in ${norepaymentpage.result})
+				<tr>
+					<td>$!borrowRepayment.id</td>
+					<td>#limit($!borrowRepayment.borrowName 10)</td>
+					<td>$!borrowRepayment.username</td>
+					<td>$!numberTool.format2Str($!borrowRepayment.repaymentAccount)</td>
+					<td>$!dateTool.dateStr($!borrowRepayment.loanTime, 'yyyy-MM-dd HH:mm:ss')</td>
+					<td>$!dateTool.dateStr($!borrowRepayment.repaymentTime, 'yyyy-MM-dd HH:mm:ss')</td>
+					<td>$!numberTool.format2Str($!borrowRepayment.interest)</td>
+					<td>$!borrowRepayment.lateDays</td>
+					<td>$!numberTool.format2Str($!borrowRepayment.lateInterest)</td>
+				</tr>
+				#end
+			</tbody>
+		</table>
+		<b>应还款总金额：</b>
+		<font color="red">$!numberTool.format2Str($!br.repaidTotal)</font>
+		&nbsp;&nbsp;&nbsp;<b>应还款总利息：</b>
+		<font color="red">$!numberTool.format2Str($!br.repaidInterest)</font>
+		&nbsp;&nbsp;&nbsp;<b>逾期总费用：</b>
+		<font color="red">$!numberTool.format2Str($!br.repaidLateInterest)</font>
+		#pagination($norepaymentpage 'borrowRepaymentForm')
+	</form>
+</div>
+
+
+
+#if($!msg)
+<script type="text/javascript">
+	swal("$!msg")
+</script>
+#end
+
+<script type="text/javascript">
+	var xlsurl = ROOT_URL + '/admin/borrow/no_repayment_list.html?type=export';
+	function exportxls() {
+		var sou = "";
+		var username = $("#username").val();
+		if (username != "") {
+			sou += "&username=" + username;
+		}
+		var borrowName = $("#borrowName").val();
+		if (borrowName != "") {
+			sou += "&borrowName=" + borrowName;
+		}
+		var loanStartTime = $("#loanStartTime").val();
+		if (loanStartTime != null && loanStartTime != ""
+				&& loanStartTime != "undefine") {
+			sou += "&loanStartTime=" + loanStartTime;
+		}
+		var loanEndTime = $("#loanEndTime").val();
+		if (loanEndTime != null && loanEndTime != ""
+				&& loanEndTime != "undefine") {
+			sou += "&loanEndTime=" + loanEndTime;
+		}
+		var repaymentStartTime = $("#repaymentStartTime").val();
+		if (repaymentStartTime != null && repaymentStartTime != ""
+				&& repaymentStartTime != "undefine") {
+			sou += "&repaymentStartTime=" + repaymentStartTime;
+		}
+		var repaymentEndTime = $("#repaymentEndTime").val();
+		if (repaymentEndTime != null && repaymentEndTime != ""
+				&& repaymentEndTime != "undefine") {
+			sou += "&repaymentEndTime=" + repaymentEndTime;
+		}
+		if (sou != "") {
+			location.href = xlsurl + sou;
+		} else {
+			location.href = xlsurl;
+		}
+	}
+</script>
+#footer()

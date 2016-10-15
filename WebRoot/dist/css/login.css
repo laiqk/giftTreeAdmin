@@ -1,0 +1,75 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  background-image: url('../images/xxxbg.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: black;
+}
+#login-box {
+  position: absolute;
+  z-index: 1;
+  width: 440px;
+  top: 26%;
+  right: 26%;
+}
+#login-box > .login-box-hd {
+  position: relative;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  height: 46px;
+  line-height: 46px;
+  width: 440px;
+  background-color: white;
+  font-size: 18px;
+  color: #2C3643;
+  text-align: center;
+  font-family: "黑体";
+}
+#login-box > #login-form {
+  position: relative;
+  height: 237px;
+  width: 440px;
+  margin-top: 2px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  background-color: white;
+}
+form.form {
+  padding-top: 15px;
+}
+form.form > .field {
+  padding-left: 118px;
+  padding-right: 118px;
+  height: 56px;
+}
+form.form > .field > label:first-child {
+  display: block;
+  height: 26px;
+  line-height: 26px;
+  font-size: 14px;
+  color: #67747C;
+}
+form.form > .field > input {
+  height: 30px;
+  line-height: 28px;
+  border: 1px solid #D4D8DE;
+  border-radius: 3px;
+  width: 200px;
+  font-size: 12px;
+  color: #D4D8DE;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+form.form button[type=submit] {
+  border: 1px solid #D4D8DE;
+  background-color: #288AD6;
+  color: white;
+  text-align: center;
+  width: 200px;
+  height: 30px;
+  line-height: 28px;
+  margin-top: 23px;
+  border-radius: 3px;
+}

@@ -1,0 +1,2 @@
+/*! XMAdmin2016 v0.0.1 | (c) 2015 Jerry */
+define("libs/templateLib",[],function(e,n,t){var i={rongzi:1,jiekuan:2,data:3,caiwu:4,index:5,yonghu:6,article:7,right:8,config:9},a=["rongzi","jiekuan","data","caiwu","index","yonghu","article","right","config"],g=function(e){return("number"!=typeof e||0>e||e>a.length)&&(e=5),a[e]},r=function(e){return i[e]},u=function(e){return o("page-"+e)},o=function(e){return ROOT_URL+"/dist/tpl/"+e+".tpl"};t.exports={pageTable:i,pageIndexTable:a,getPageByIndex:g,getPageIndexByName:r,getPageLink:u,getTplLink:o}});

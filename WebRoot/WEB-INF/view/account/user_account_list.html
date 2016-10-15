@@ -1,0 +1,104 @@
+#header()
+<script type="text/javascript" src="${admurl}/public/rooms/My97DatePicker/WdatePicker.js"></script>
+<ol class="breadcrumb">
+	<li><a href="$admurl/admin/welcome.html">首页</a></li>
+	<li>资金管理</li>
+	<li class="active">用户资金记录</li>
+</ol>
+<div class="">
+	<form id="userAccount" name="userAccount" action="$admurl/admin/account/user_account_list.html" class="navbar-form">
+		<input type="hidden" id="page" name="page" #if($!page) value="$page" #else value="1" #end />
+		<div class="form-group">
+			用户名: <input type="text" class="form-control" placeholder="用户名" id="username" name="username" value="$!username">
+			用户ID: <input type="text" class="form-control" placeholder="用户id" id="userId" name="userId" value="$!userId">
+			真实姓名: <input type="text" class="form-control" placeholder="真实姓名" id="realname" name="realName" value="$!realName">
+			手机号码: <input type="text" class="form-control" placeholder="手机号码" id="mobile" name="mobile" value="$!mobile"><br><br>
+			开始时间： <input type="text" id="startTime" name="startTime" class="form-control" placeholder="开始时间" value="$!startTime" onclick="WdatePicker({errDealMode:1,el:'startTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+			结束时间： <input type="text" id="endTime" name="endTime" class="form-control" placeholder="结束时间" value="$!endTime" onclick="WdatePicker({errDealMode:1,el:'endTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+			可用余额区间：<input type="text" class="form-control" placeholder="最小可用" id="moneyUsablemin" name="moneyUsablemin" value="$!moneyUsablemin">至
+						<input type="text" class="form-control" placeholder="最大可用" id="moneyUsablemax" name="moneyUsablemax" value="$!moneyUsablemax">
+			&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-default">搜索</button>
+			&nbsp;&nbsp;&nbsp;<a onclick="exportxls()">导出EXCEL</a><br><br>
+		</div>
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>编号</th>
+					<th>用户ID</th>
+					<th>用户名</th>
+					<th>真实姓名</th>
+					<th>手机号</th>
+					<th>总资产</th>
+					<th>可用余额</th>
+					<th>投标冻结金额</th>
+					<th>累计收益</th>
+					<th>待收金额</th>
+					<th>创建时间</th>
+					<!-- <th>用户配资保证金金额</th> -->
+					<!--<th>操作</th>-->
+				</tr>
+			</thead>
+			<tbody>
+				#foreach($accout in $!{account.result})
+				<tr>
+					<td>$!accout.id</td>
+					<td>$!accout.userId</td>
+					<td>$!accout.username</td>
+					<td>$!accout.realName</td>
+					<td>$!accout.mobile</td>
+					<td>$!numberTool.format2Str($!accout.moneyTotal)</td>
+					<td>$!numberTool.format2Str($!accout.moneyUsable)</td>
+					<td>$!numberTool.format2Str($!accout.moneyTenderFreeze)</td>
+					<td>$!numberTool.format2Str($!accout.profitsTotal)</td>
+					<td>$!numberTool.format2Str($!accout.moneyCollection)</td>
+					<td>$!dateTool.dateStr($!accout.createdAt, 'yyyy-MM-dd HH:mm:ss')</td>
+					<!-- 	<td><a href="$admurl/admin/account/charge_offline.html?opt=view&uid=$!account.userId">充值</a></td> -->
+				</tr>
+				#end
+			</tbody>
+		</table>
+		<!-- <b>总资产：</b><font color="red">$!numberTool.format2Str($!ua.moneyTotal)</font>&nbsp;&nbsp;&nbsp; <b>待收总额：</b><font color="red">$!numberTool.format2Str($!ua.moneyCollection)</font>&nbsp;&nbsp;&nbsp; <b>可用总金额：</b><font color="red">$!numberTool.format2Str($!ua.moneyUsable)</font>&nbsp;&nbsp;&nbsp;<b>投标冻结总金额：</b><font color="red">$!numberTool.format2Str($!ua.moneyTenderFreeze)</font>&nbsp;&nbsp;&nbsp; <b>累计总收益：</b><font color="red">$!numberTool.format2Str($!ua.profitsTotal)</font>&nbsp;&nbsp;&nbsp; -->
+		#pagination($!account 'userAccount')
+	</form>
+</div>
+#if($!msg)
+<script type="text/javascript">
+	swal("$!msg")
+</script>
+#end
+<script type="text/javascript">
+	var xlsurl = ROOT_URL + '/admin/account/user_account_list.html?type=export';
+	function exportxls() {
+		var sou = "";
+		var username = $("#username").val();
+		if (username != "") {
+			sou += "&username=" + username;
+		}
+		var realname = $("#realname").val();
+		if (realname != "") {
+			sou += "&realname=" + realname;
+		}
+		var mobile = $("#mobile").val();
+		if (mobile != "") {
+			sou += "&mobile=" + mobile;
+		}
+		var userId = $("#userId").val();
+		if (userId != "") {
+			sou += "&userId=" + userId;
+		}
+		var startTime = $("#startTime").val();
+		if (startTime != null && startTime != "" && startTime != "undefine") {
+			sou += "&startTime=" + startTime;
+		}
+		var endTime = $("#endTime").val();
+		if (endTime != null && endTime != "" && endTime != "undefine") {
+			sou += "&endTime=" + endTime;
+		}
+		if (sou != "") {
+			location.href = xlsurl + sou;
+		} else {
+			location.href = xlsurl;
+		}
+	}
+</script>
+#footer()

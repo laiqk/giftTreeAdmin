@@ -1,0 +1,111 @@
+@dataBoxWidth: 278px;
+@dataBoxMargin: 16px;
+@dataBoxHeight: 140px;
+@white: white;
+
+.dib(){
+	display: inline-block;
+}
+// font & color & font-weight
+.fs(@size: @rootSize) when (isnumber(@size)){
+	font-size: @size;
+}
+.fs(@size) when (default()) {
+	font-size: @rootSize;
+}
+.fc(@fontSize: @rootSize; @color: #333333){
+	.fs(@fontSize);
+	color: @color;
+}
+.fcf(@fontSize: @rootSize; @color: #333333; @fontWeight: normal)
+	when ( iskeyword(@fontWeight) ){
+	.fc(@fontSize, @color);
+	font-weight: @fontWeight;
+}
+.bgc(@bgColor){
+	background-color: @bgColor;
+}
+
+// display: inline-block 消除间隙
+.dib-wrap{
+	font-size: 0;//* 所有浏览器 */
+	// *word-spacing: -1px;/* IE6、7 */
+	> .dib{
+		font-size: 12px;
+		vertical-align: top;
+		letter-spacing: normal;
+		word-spacing: normal;
+	}
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0){
+	// firefox 中 letter-spacing 会导致脱离普通流的元素水平位移
+	.dib-wrap{
+		letter-spacing: -5px;
+		// Safari 等不支持字体大小为 0 的浏览器, N 根据父级字体调节/
+	}
+}
+.dib{
+	.dib();
+	// *display: inline;
+	// *zoom: 1;
+}
+
+#data-show{
+	width: @dataBoxWidth * 4 + @dataBoxMargin * 3;
+	height: @dataBoxHeight;
+	margin-bottom: 56px;
+	>.dib{
+		position: relative;
+		width: @dataBoxWidth;
+		height: @dataBoxHeight;
+		margin-left: 14px;
+		&:first-child{
+			margin-left: 0;
+		}
+		>div:first-child{
+			padding: 14px;
+			height: 105px;
+			>span{
+				.fc(12px, @white);
+			}
+			>div{
+				.fc(36px, @white);
+			}
+		}
+		>div:first-child + div{
+			color: @white;
+			padding-left: 14px;
+			padding-right: 14px;
+			height: 35px;
+			line-height: 35px;
+		}
+		>.data-show-graph{
+			position: absolute;
+			top: 13px;
+			right: 14px;
+			width: 130px;
+			height: 60px;
+			// .bgc(rgba(255, 255, 255, 0.15));
+			rect:hover{
+				fill-opacity: 0.6;
+			}
+		}
+	}
+}
+
+.bg{
+	.bgc(@bgName; @bgColor){
+		&-@{bgName}{
+			.bgc(@bgColor) !important;
+		}
+	}
+	.bgc(p2-green, #16c98d);
+	.bgc(p2-darkgreen, #1ca074);
+	.bgc(p2-blue, #00a3dc);
+	.bgc(p2-darkblue, #0b7296);
+	.bgc(p2-yellow, #ffc100);
+	.bgc(p2-darkyellow, #c99d13);
+	.bgc(p2-purple, #684e79);
+	.bgc(p2-darkpurple, #56366a);
+}

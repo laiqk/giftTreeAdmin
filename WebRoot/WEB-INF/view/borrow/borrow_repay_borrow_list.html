@@ -1,0 +1,45 @@
+#header()
+<ol class="breadcrumb">
+	<li><a href="$admurl/admin/welcome.html">首页</a></li>
+	<li><a href="#">理财管理</a></li>
+	<li><a href="#">产品列表</a></li>
+	<li class="active">还款详情</li>
+</ol>
+<div class="">
+	<div class="form-group">
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>编号</th>
+					<th>标题</th>
+					<th>类型</th>
+					<th>借款人</th>
+					<th>借款金额</th>
+					<th>应还款日期</th>
+					<th>本期应还本息</th>
+					<th>状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				#foreach($repay in $repaylist)
+				<tr>
+					<td>$!repay.id</td>
+					<td>#limit($!repay.borrowName 10)</td>
+					<td>$!statusTool.getBorrowTypeName($!repay.borrowType)</td>
+					<td>$!repay.username</td>
+					<td>$!repay.account</td>
+					<td>$!dateTool.dateStr($!repay.repaymentTime, 'yyyy-MM-dd HH:mm:ss')</td>
+					<td>$!moneyTool.format3Str($!repay.capital,$!repay.interest)</td>
+					<td>$!statusTool.getBorrowStatusName($!repay.borrowstatus)</td>
+					<td>
+						<a onclick="return confirm('确定要去代还吗？');" href="$admurl/admin/myhome/compensatory.html?bid=$!repay.id" id="cheB">代还</a>
+					</td>
+				</tr>
+				#end
+			</tbody>
+		</table>
+	</div>
+</div>
+
+#footer()

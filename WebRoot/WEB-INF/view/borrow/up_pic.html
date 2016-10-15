@@ -1,0 +1,38 @@
+#header()
+	<script type="text/javascript" src="${admurl}/kindeditor/kindeditor.js"></script>
+	<script type="text/javascript" src="${admurl}/kindeditor/lang/zh_CN.js"></script>
+	<script type="text/javascript" src="${admurl}/public/uploadImg1.js"></script>
+	<script type="text/javascript">var ROOT_URL="${admurl}";</script>
+	
+	<label class="col-sm-2 control-label">
+		<select id="selected" onchange="selected();">
+			<option value="pro" >项目证明</option>
+			<option value="ass">资产包证明</option>
+			<option value="gua">担保证明</option>
+			<option value="saf">保障证明</option>
+		</select>
+	</label>
+	<button  onclick="addImg1();">添加</button>
+					    	 单个图片上传不能超过2M大小,重复保存将执行覆盖操作 &nbsp;&nbsp;<a href="${admurl}/admin/borrow/reset.html?borrowId=$!borrowId">重置</a>
+		<div style="margin:10px 0 30px 253px;" >
+					    	
+					    	<div   id="Img1" >
+					    		<form style="text-align:center" action="" id="avatarForm1" enctype="multipart/form-data" method="post">
+					    		<input type="file" name="imgFile"  onchange="previewImage(1,1)"  style="margin-bottom:10px;"></form>
+					    	</div>
+					    	
+					    	<img alt="" id="avatarUpload1" src="${admurl}/public/images/pic-p.jpg" height="200" width="200"/>
+					    	
+					    	<form action="${admurl}/admin/borrow/confirm.html" id="avatarForm" enctype="multipart/form-data" method="post">
+					    	<input type="hidden" id="filevalue1" name="filevalue1" required="">
+					    	<input type="hidden" id="filevalue2" name="filevalue2" required="">
+					    	<input type="hidden" id="filevalue3" name="filevalue3" required="">
+					    	<input type="hidden" id="filevalue4" name="filevalue4" required="">
+					    	<input type="hidden" id="filevalue" name="filevalue"  value="pro">
+					    	<input type="hidden"  name="borrowId"  value="$!borrowId">
+					    	
+					  		  <button class="pure-button button-primary" style="margin-top:10px;">保存图片</button>
+					    	</form>
+	</div>
+	<div id="suggest-list"></div>
+#footer()

@@ -1,0 +1,165 @@
+#header()
+<script type="text/javascript" src="${admurl}/public/rooms/My97DatePicker/WdatePicker.js"></script>
+<ol class="breadcrumb">
+	<li><a href="$admurl/admin/welcome.html">首页</a></li>
+	<li>资金管理</li>
+	<li class="active">红包使用列表</li>
+</ol>
+<div class="">
+	<form id="hongbaoForm" name="hongbaoForm" action="$admurl/admin/account/user_hongbao_list.html" class="navbar-form">
+		<input type="hidden" id="page" name="page" #if($!page) value="$page" #else value="1" #end />
+		<div class="form-group">
+			用户名： <input type="text" class="form-control" placeholder="用户名" id="username" name="username" value="$!username">
+			项目名称： <input type="text" class="form-control" placeholder="项目名称" id="borrowname" name="borrowname" value="$!borrowname">
+			使用开始时间： <input type="text" id="startTime" name="startTime" class="form-control" placeholder="开始时间" value="$!startTime" onclick="WdatePicker({errDealMode:1,el:'startTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+			使用结束时间： <input type="text" id="endTime" name="endTime" class="form-control" placeholder="结束时间" value="$!endTime" onclick="WdatePicker({errDealMode:1,el:'endTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})"><br><br>
+			红包类型:
+			<select class="form-control" name="type" id="type">
+				<option #if($!type== '') selected="selected" #end value="">全部</option>
+				<option #if($!type== '0') selected="selected" #end value="0">注册送金色红包</option>
+				<option #if($!type== '1') selected="selected" #end value="1">注册送普通红包</option>
+				<option #if($!type== '2') selected="selected" #end value="2">推荐送红包</option>
+				<option #if($!type== '3') selected="selected" #end value="3">投资送红包</option>
+				<option #if($!type== '4') selected="selected" #end value="4">兑换红包</option>
+				<option #if($!type== '9') selected="selected" #end value="9">银色红包</option>
+			</select>
+			状态:
+			<select class="form-control" name="hongbaostatus" id="hongbaostatus">
+				<option #if($!hongbaostatus== '') selected="selected" #end value="">全部</option>
+				<option #if($!hongbaostatus== '0') selected="selected" #end value="0">未使用</option>
+				<option #if($!hongbaostatus== '1') selected="selected" #end value="1">已使用</option>
+				<option #if($!hongbaostatus== '2') selected="selected" #end value="2">已过期</option>
+				<option #if($!hongbaostatus== '3') selected="selected" #end value="3">投标成功冻结</option>
+			</select>
+			&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-default">搜索</button>
+			&nbsp;&nbsp;&nbsp;<a onclick="exportxls()">导出EXCEL</a> <br> <br>
+		</div>
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>用户名</th>
+					<th>项目名称</th>
+					<th>红包类型</th>
+					<th>状态</th>
+					<th>红包金额</th>
+					<th>备注</th>
+					<th>红包发放时间</th>
+					<th>红包过期时间</th>
+					<th>红包使用时间</th>
+					<th>红包使用情况</th>
+				</tr>
+			</thead>
+			<tbody>
+				#foreach($hongbao in ${hongbaopage.result})
+				<tr>
+					<td>$!hongbao.id</td>
+					<td>$!hongbao.username</td>
+					<td>$!hongbao.borrowname</td>
+					<td>
+					#if($!hongbao.type==0)
+						注册送金色红包
+					#elseif($!hongbao.type==1)
+						注册送普通红包
+					#elseif($!hongbao.type==2)
+						邀请推荐送红包
+					#elseif($!hongbao.type==3)
+						投资送红包
+					#elseif($!hongbao.type==4)
+						兑换红包
+					#elseif($!hongbao.type==9)
+						银色红包
+					#end
+					</td>
+					<td>
+					#if($!hongbao.hongbaostatus==0)
+						未使用
+					#elseif($!hongbao.hongbaostatus==1)
+						<font color="red">已使用</font>
+					#elseif ($!hongbao.hongbaostatus==2)
+						已过期
+					#elseif($!hongbao.hongbaostatus==3)
+						<font color="blue">投标成功冻结</font>
+					#end
+					</td>
+					<td>$!numberTool.format2Str($!hongbao.hongbaoMoney)</td>
+					<td>$!hongbao.remark</td>
+					<td>
+					#if($!hongbao.createdTime)
+						$!dateTool.dateStr($!hongbao.createdTime, 'yyyy-MM-dd HH:mm:ss')
+					#end
+					</td>
+					<td>
+					#if($!hongbao.expiredTime)
+						$!dateTool.dateStr($!hongbao.expiredTime, 'yyyy-MM-dd HH:mm:ss')
+					#end
+					</td>
+					<td>
+					#if($!hongbao.loanTime)
+						$!dateTool.dateStr($!hongbao.loanTime, 'yyyy-MM-dd HH:mm:ss')
+					#end
+					</td>
+					<td>$!hongbao.useInfo</td>
+				</tr>
+				#end
+			</tbody>
+		</table>
+		<b>
+			#if($!hongbaostatus=='')
+			全部
+			#elseif($!hongbaostatus=='0')
+			未使用
+			#elseif($!hongbaostatus=='1')
+			已使用
+			#elseif($!hongbaostatus=='2')
+			已过期
+			#elseif($!hongbaostatus=='3')
+			投标成功冻结
+			#end
+			红包总金额：
+		</b>
+		<font color="red">$!numberTool.format2Str($!hb.totalhongbao)</font>
+		#pagination($hongbaopage 'hongbaoForm')
+	</form>
+</div>
+#if($!msg)
+<script type="text/javascript">
+	swal("$!msg")
+</script>
+#end
+<script type="text/javascript">
+	var xlsurl = ROOT_URL + '/admin/account/user_hongbao_list.html?exporttype=export';
+	function exportxls() {
+		var sou = "";
+		var username = $("#username").val();
+		if (username != "") {
+			sou += "&username=" + username;
+		}
+		var borrowname = $("#borrowname").val();
+		if (borrowname != "") {
+			sou += "&borrowname=" + borrowname;
+		}
+		var startTime = $("#startTime").val();
+		if (startTime != null && startTime != "" && startTime != "undefine") {
+			sou += "&startTime=" + startTime;
+		}
+		var endTime = $("#endTime").val();
+		if (endTime != null && endTime != "" && endTime != "undefine") {
+			sou += "&endTime=" + endTime;
+		}
+		var hongbaostatus = $("#hongbaostatus").val();
+		if (hongbaostatus != null) {
+			sou += "&hongbaostatus=" + hongbaostatus;
+		}
+		var type = $("#type").val();
+		if (type != null) {
+			sou += "&type=" + type;
+		}
+		if (sou != "") {
+			location.href = xlsurl + sou;
+		} else {
+			location.href = xlsurl;
+		}
+	}
+</script>
+#footer()

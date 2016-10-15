@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<title>管理后台 </title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<base href="${admurl}"></base>
+	<link rel="stylesheet" href="${admurl}/${theme_dir}/rooms/bootstrap/css/bootstrap.min.css" media="all">
+	<link rel="stylesheet" href="${admurl}/${theme_dir}/rooms/jquery-ui/themes/flick/jquery-ui.min.css" media="all">
+	<link rel="stylesheet" href="${admurl}/${theme_dir}/rooms/jquery-ui/themes/flick/theme.css" media="all">
+	<link rel="stylesheet" href="${admurl}/${theme_dir}/rooms/pace/themes/blue/pace-theme-flash.css" media="all">
+	<!-- <link rel="stylesheet" href="${admurl}/${theme_dir}/rooms/simditor/styles/font-awesome.css" media="all"> -->
+	<link rel="stylesheet" href="${admurl}/${theme_dir}/rooms/simditor/styles/simditor.css" media="all">
+	<link rel='stylesheet' href='${admurl}/${theme_dir}/rooms/sweetalert/sweetalert.css' media="all">
+	<link rel='stylesheet' href='${admurl}/${theme_dir}/stylesheets/style.css' media="all">
+	<link rel="stylesheet" href="${admurl}/dist/css/common.css">
+	<link rel="stylesheet" href="${admurl}/dist/css/main.css">
+	<script>
+	var ROOT_URL = '${admurl}';
+	var urlConfig = {
+		'bnsearch': ROOT_URL + '/searchBorrower.html'
+	};
+	
+	var seajsEnv = {
+			'mode': 'production',
+			'debug': true
+	}
+	</script>
+	<!--[css patch]-->
+	<link rel="stylesheet" href="${admurl}/dist/css/admin.min.css">
+	<!--[end]-->
+	<!--[seajs]-->
+	
+	
+	<script src="${admurl}/lib/js/jquery-1.11.3.min.js"></script>
+	<script src="${admurl}/lib/js/sea.js"></script>
+	<script src="${admurl}/dist/js/config.js"></script>
+	<script src="${admurl}/dist/js/main/index.js"></script>
+	<script src="${admurl}/dist/js/main/fabu.js"></script>
+	<script src="${admurl}/dist/js/main/index-chart.js"></script>
+	<script src="${admurl}/dist/js/modules/log.js"></script>
+	<script src="${admurl}/lib/js/seajs-preload.js"></script>
+	<!--[end]-->
+
+	<!-- libraries -->
+	<!--
+	<script src="${admurl}/${theme_dir}/rooms/jquery.min.js"></script>
+	-->
+
+	<script src="${admurl}/${theme_dir}/rooms/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${admurl}/${theme_dir}/rooms/pace/pace.min.js"></script>
+	<script src="${admurl}/${theme_dir}/rooms/jquery-ui/jquery-ui.min.js"></script>
+	<script src='${admurl}/${theme_dir}/rooms/sweetalert/sweetalert.min.js'></script>
+
+	<!-- editor -->
+	<script src="${admurl}/${theme_dir}/rooms/simditor/scripts/module.min.js"></script>
+	<script src="${admurl}/${theme_dir}/rooms/simditor/scripts/hotkeys.min.js"></script>
+	<script src="${admurl}/${theme_dir}/rooms/simditor/scripts/uploader.min.js"></script>
+	<script src="${admurl}/${theme_dir}/rooms/simditor/scripts/simditor.min.js"></script>
+
+	<!-- common -->
+	<script src="${admurl}/${theme_dir}/javascripts/common.js"></script>
+	
+	
+</head>
+<body>
+
+	 <nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topbar-dropdown-menu">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="$admurl/admin/welcome.html" class="navbar-brand">$!currUser.username</a>
+				<!--  <a href="$admurl/index.html?type=logout" class="navbar-brand">退出</a> -->
+			</div>
+	
+			<div class="collapse navbar-collapse" id="topbar-dropdown-menu">
+				<ul class="nav navbar-nav">
+					#foreach($item in $menuList)
+						#if(!$item.parent)
+							<li class="dropdown">
+								#if(!$item.data)
+									<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" >
+										$!{item.name}<span class="caret"></span>
+									</a>
+									<ul class="dropdown-menu" role="menu">
+									#foreach($it in $menuList)
+										#if($it.parent == $item.id)
+										<li><a href="${admurl}$!{it.data}">$!{it.name}</a></li>
+										#end
+									#end
+									</ul>
+								#else
+									<a href="${admurl}$!{item.data}">$!{item.name}</a>
+								#end
+							</li>
+						#end
+					#end
+					<li class="dropdown">
+					   <a href="$admurl/index.html?type=logout"  >退出系统</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav> 
+
+	<div class="xmcontainer">

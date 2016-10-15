@@ -1,0 +1,277 @@
+#header()
+	<script type="text/javascript" src="${admurl}/kindeditor/kindeditor.js"></script>
+	<script type="text/javascript" src="${admurl}/kindeditor/lang/zh_CN.js"></script>
+	<script type="text/javascript" src="${admurl}/public/uploadImg.js"></script>
+	<script type="text/javascript" src="${admurl}/public/rooms/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript">var ROOT_URL="${admurl}";</script>
+	<!-- 配置文件 -->
+	<!-- 实例化编辑器 -->
+	<ol class="breadcrumb">
+		<li><a href="$admurl/admin/welcome.html">首页</a></li>
+		<li>理财管理</li>
+		<li class="active">发布借款标</li>
+	</ol>
+	<div class="">
+	<!-- 上传图片
+		<div class="form-group" style="height:265px">
+					    	<label class="col-sm-2 control-label">图片上传</label> 单个图片上传不能超过2M大小
+					    	<div class="col-sm-3">
+					    	<form action="" id="avatarForm" enctype="multipart/form-data" method="post">
+					    	<input type="file" name="imgFile" id="avatarFile1" /><br/>
+					    	<img alt="" id="avatarUpload" src="${admurl}/public/images/pic-p.jpg" height="200" width="200"/></form>
+			   				</div>
+		</div> 
+	 -->	
+		<form class="form-horizontal" action="$admurl/admin/borrow/opborrow_add.html" method="post" enctype="multipart/form-data">
+			#if($!opt == 'edit')
+			<input type="hidden" id="opt" name="opt" value="edit">
+			<input type="hidden" id="borrowId" name="borrowId" value="$!borrow.id">
+			#else
+			<input type="hidden" id="opt" name="opt" value="add">
+			#end
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-2 control-label">借款标题</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" id="name" name="name" value="$!borrow.name">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="username" class="col-sm-2 control-label">借款人</label>
+				<div class="col-sm-3">
+					<!-- <select style="width:300px;" id="borrower" name="borrower">
+						#if($!borrower_U)
+							#foreach($bor in $borrower_U)
+								<option value="$!bor.id" #if($!borrow.userId == $!bor.id) selected="selected" #end>$!bor.username</option>
+							#end
+						#else
+						<option value="nosuitName">没有满足条件的借款人</option>
+						#end
+					</select> -->
+					<input type="hidden" id="borrower" name="borrower" value="$!borrow.userId">
+					<input type="text" class="form-control" id="username"  name="username" value="$!borrow_user.username">
+				</div>
+				<button type="button" id="get-suggest" class="right-button">搜索</button>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-2 control-label">标类型</label>
+				<div class="col-sm-3">
+					<select id="borrow_type" name="borrow_type" style="width:300px;">
+						<!--  <option #if($!borrow.borrowType==0) selected="selected" #end value="0">$webname 体验标</option>-->
+						<option id="select_1" #if($!borrow.borrowType==1) selected="selected" #end value="1">$webname 新手标</option>
+						<option id="select_2" #if($!borrow.borrowType==2) selected="selected" #end value="2">$webname 供应融</option>
+						<option id="select_3" #if($!borrow.borrowType==3) selected="selected" #end value="3">$webname 保理融</option>
+						<option id="select_4" #if($!borrow.borrowType==4) selected="selected" #end value="4">$webname 优企融</option>
+						<option id="select_5" #if($!borrow.borrowType==5) selected="selected" #end value="5">$webname 余额融</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-2 control-label">还款方式</label>
+				<div class="col-sm-3">
+					<select id="repayment_style" name="repayment_style" style="width:300px;">
+						<!-- <option #if($!borrow.borrowStyle==1) selected="selected" #end value="1">等额本息</option> -->
+						<option #if($!borrow.borrowStyle==2) selected="selected" #end value="2">到期还本还息</option>
+						<!-- <option #if($!borrow.borrowStyle==3) selected="selected" #end value="3">按月付息到期还本</option> -->
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+			<label for="inputEmail3" class="col-sm-2 control-label">是否天标</label>
+			<div class="col-sm-3">
+				<label class="radio-inline">
+					<input type="radio" name="isDay" id="day1" value="1" #if($!borrow.isDay==1 || !$borrow.isDay) checked="checked" #end> 是
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="isDay" id="day2" value="0" #if($!borrow.isDay==0) checked="checked" #end> 不是
+				</label>
+			</div>
+			</div>
+			<div class="form-group">
+			<label for="inputEmail3" class="col-sm-2 control-label">借款金额</label>
+			<div class="col-sm-3">
+				<input type="number" step="1" class="form-control" id="account" name="account" value="$!borrow.account">
+			</div>
+			</div>
+			<div class="form-group">
+			<label for="inputEmail3" class="col-sm-2 control-label">年利率</label>
+			<div class="col-sm-3">
+				<input type="number" step="0.01"  class="form-control" id="apr" name="apr" value="$!borrow.apr">
+			</div>
+			</div>
+			<div id="current_bid5" style="display: none;">
+				<div class="form-group">
+				<label for="inputEmail3" class="col-sm-2 control-label">赎回利率A</label>
+				<div class="col-sm-3">
+					<input type="number" step="0.01"  class="form-control" id="aprA" name="aprA" value="$!borrow.aprA">
+				</div>
+				<label for="inputEmail3" class="col-sm-2 control-label">赎回期限A</label>
+					<div class="col-sm-3">
+						<input type="number" class="form-control" id="timelimit" name="timelimitA" value="$!borrow.timeLimitA">
+					</div>
+				</div>
+				<div class="form-group">
+				<label for="inputEmail3" class="col-sm-2 control-label">赎回利率B</label>
+				<div class="col-sm-3">
+					<input type="number" step="0.01"  class="form-control" id="aprB" name="aprB" value="$!borrow.aprB">
+				</div>
+				<label for="inputEmail3" class="col-sm-2 control-label">赎回期限B</label>
+				<div class="col-sm-3">
+						<input type="number" class="form-control" id="timelimit" name="timelimitB" value="$!borrow.timeLimitB">
+				</div>
+				</div>
+				<div class="form-group">
+				<label for="inputEmail3" class="col-sm-2 control-label">赎回利率C</label>
+				<div class="col-sm-3">
+					<input type="number" step="0.01"  class="form-control" id="aprC" name="aprC" value="$!borrow.aprC">
+				</div>
+				<label for="inputEmail3" class="col-sm-2 control-label">赎回期限C</label>
+				<div class="col-sm-3">
+						<input type="number" class="form-control" id="timelimitC" name="timelimitC" value="$!borrow.timeLimitC">
+				</div>
+				</div>
+				<div class="form-group">
+				<label for="inputEmail3" class="col-sm-2 control-label">赎回利率D</label>
+				<div class="col-sm-3">
+					<input type="number" step="0.01"  class="form-control" id="aprD" name="aprD" value="$!borrow.aprD">
+				</div>
+				<label for="inputEmail3" class="col-sm-2 control-label">赎回期限D</label>
+				<div class="col-sm-3">
+						<input type="number" class="form-control" id="timelimitD" name="timelimitD" value="$!borrow.timeLimitD">
+				</div>
+				</div>
+				<div class="form-group">
+				<label for="inputEmail3" class="col-sm-2 control-label">赎回利率E</label>
+				<div class="col-sm-3">
+					<input type="number" step="0.01"  class="form-control" id="aprE" name="aprE" value="$!borrow.aprE">
+				</div>
+				<label for="inputEmail3" class="col-sm-2 control-label">赎回期限E</label>
+				<div class="col-sm-3">
+						<input type="number" class="form-control" id="timelimitE" name="timelimitE" value="$!borrow.timeLimitE">
+				</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-2 control-label">借款期限</label>
+				<div class="col-sm-3">
+					<input type="number" class="form-control" id="timelimit" name="timelimit" value="$!borrow.timeLimit">
+				</div>
+				#if($!borrow.isDay==0) 
+				<label for="timelimit" class="right-label">月</label>
+				#else 
+				<label for="timelimit" class="right-label">天</label>
+				#end
+			</div>
+			<div class="form-group">
+			<label for="inputEmail3" class="col-sm-2 control-label">最低投标金额</label>
+			<div class="col-sm-3">
+				<input type="number" step="1"  class="form-control" id="lowest_account" name="lowest_account" value="$!borrow.lowestAccount">
+			</div>
+			</div>
+			<div class="form-group">
+			<label for="inputEmail3" class="col-sm-2 control-label">最高投标金额</label>
+			<div class="col-sm-3">
+				<input type="number"  class="form-control" id="most_account" name="most_account" value="$!borrow.mostAccount">
+			</div>
+			</div>
+			<div class="form-group">
+			<label for="inputEmail3" class="col-sm-2 control-label">募集开始时间</label>
+			<div class="col-sm-3">
+				<input type="text" id="publish_date" name="publish_date" class="form-control" value="$!dateTool.dateStr($!borrow.publishDate,'yyyy-MM-dd HH:mm:ss')" onclick="WdatePicker({errDealMode:1,el:'publish_date',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+			</div>
+			</div>
+			<div class="form-group">
+			<label for="inputEmail3" class="col-sm-2 control-label">有效时间</label>
+			<div class="col-sm-3">
+				<select id="valid_time" name="valid_time">
+				<option #if($!borrow.validTime==1) selected="selected" #end value="1">1天</option>
+				<option #if($!borrow.validTime==2) selected="selected" #end value="2">2天</option>
+				<option #if($!borrow.validTime==3) selected="selected" #end value="3">3天</option>
+				<option #if($!borrow.validTime==4) selected="selected" #end value="4">4天</option>
+				<option #if($!borrow.validTime==5) selected="selected" #end value="5">5天</option>
+				<option #if($!borrow.validTime==6) selected="selected" #end value="6">6天</option>
+				<option #if($!borrow.validTime==7) selected="selected" #end value="7">7天</option>
+				</select>
+			</div>
+			</div>
+			<div class="form-group">
+			<label for="inputEmail3" class="col-sm-2 control-label">借款手续费</label>
+			<div class="col-sm-3">
+				<input type="number" step="1" class="form-control" id="borrowFeeApr" name="borrowFeeApr" value="$!borrow.borrowFeeApr">
+			</div>
+			</div>
+			<!-- <div class="form-group">
+			<label for="inputEmail3" class="col-sm-2 control-label">标签特性</label>
+			<div class="col-sm-3">
+				<input type="text" class="form-control" id="features" name="features" value="$!borrow.features">
+			</div>
+			<label class="right-label">标签间以(,;)等分隔</label>
+			</div> -->
+			<div class="form-group">
+			<label for="inputEmail3" class="col-sm-2 control-label">优先级</label>
+			<div class="col-sm-3">
+				<select id="boOrder" name="boOrder">
+				<option #if($!borrow.boOrder==1) selected="selected" #end value="1">特级</option>
+				<option #if($!borrow.boOrder==2) selected="selected" #end value="2">1级</option>
+				<option #if($!borrow.boOrder==3) selected="selected" #end value="3">2级</option>
+				<option #if($!borrow.boOrder==4) selected="selected" #end value="4">3级</option>
+				<option #if($!borrow.boOrder==5) selected="selected" #end value="5">4级</option>
+				</select>
+			</div>
+			</div>
+			<div class="form-group">
+			<label for="inputEmail3" class="col-sm-2 control-label">项目介绍</label>
+			<div class="col-sm-3">
+				<textarea id="editor_id" name="content" style="width:700px;height:300px;">
+					$!borrow.content
+				</textarea>
+			</div>
+			</div>
+			<div class="form-group">
+			<label for="inputEmail3" class="col-sm-2 control-label">安全保障</label>
+			<div class="col-sm-3">
+				<textarea id="editor2_id" name="insurance" style="width:700px;height:300px;">
+				$!borrow.insurance
+				</textarea>
+			</div>
+			</div>
+			<input type="hidden" name="imgUpload" id="imgUpload" value=""/>
+			<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-primary" onsubmit="return check();">创建</button>
+			</div>
+			</div>
+		</form>
+		
+		
+			
+	</div>
+	<div id="suggest-list"></div>
+	#if($!msg)
+	<script type="text/javascript">swal("$!msg")</script>
+	#end
+
+	<script>
+	        KindEditor.ready(function(K) {
+                window.editor = K.create('#editor_id', {
+                        uploadJson : ROOT_URL+'/kindeditor/jsp/upload_json.jsp',
+                        fileManagerJson : ROOT_URL+'/kindeditor/jsp/file_manager_json.jsp',
+                        allowFileManager : true
+                	});
+                window.editor2 = K.create('#editor2_id', {
+                        uploadJson : ROOT_URL+'/kindeditor/jsp/upload_json.jsp',
+                        fileManagerJson : ROOT_URL+'/kindeditor/jsp/file_manager_json.jsp',
+                        allowFileManager : true
+                	});
+	        });
+			$("#borrow_type").bind("change", function(){
+				var x = $(this).val();
+				if(x==5){
+					$("#current_bid5").show();
+				}else{
+					$("#current_bid5").hide();
+				}
+			})
+	</script>  
+
+<script>seajs.use('borrow/add');</script>
+#footer()

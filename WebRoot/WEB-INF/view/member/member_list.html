@@ -1,0 +1,125 @@
+#header()
+<script type="text/javascript" src="${admurl}/public/rooms/My97DatePicker/WdatePicker.js"></script>
+<ol class="breadcrumb">
+	<li><a href="$admurl/admin/welcome.html">首页</a></li>
+	<li>用户管理</li>
+	<li class="active">前台用户列表</li>
+</ol>
+<div class="">
+	<form id="userForm" name="userForm" action="$admurl/admin/member/webuser.html" class="navbar-form">
+		<input type="hidden" id="page" name="page" #if($!page) value="$page" #else value="1" #end /> <input type="hidden" id="ctype" name="ctype" value="$!ctype" />
+		<div class="form-group">
+			用户名: <input type="text" class="form-control" placeholder="用户名" name="username" id="username" value="$!username">
+			真实姓名: <input type="text" class="form-control" placeholder="真实姓名" name="realname" id="realname" value="$!realname">
+			手机号码: <input type="tel" class="form-control" placeholder="手机号" name="mobile" id="mobile" value="$!mobile">
+			是否实名认证:
+			<select class="form-control" name="realVerifyStatus" id="realVerifyStatus">
+				<option #if($!realVerifyStatus== '') selected="selected" #end value="">全部</option>
+				<option #if($!realVerifyStatus== '1') selected="selected" #end value="1">是</option>
+				<option #if($!realVerifyStatus== '0') selected="selected" #end value="0">否</option>
+				<option #if($!realVerifyStatus== '2') selected="selected" #end value="2">待审核</option>
+			</select><br><br>
+			认证开始时间： <input type="text" id="startTime" name="startTime" class="form-control" placeholder="认证开始时间" value="$!startTime" onclick="WdatePicker({errDealMode:1,el:'startTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+			认证结束时间： <input type="text" id="endTime" name="endTime" class="form-control" placeholder="认证结束时间" value="$!endTime" onclick="WdatePicker({errDealMode:1,el:'endTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+			&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-default">搜索</button>
+			&nbsp;&nbsp;&nbsp;<a onclick="exportxls()">导出EXCEL</a><br><br>
+		</div>
+		<br>
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>用户名</th>
+					<th>手机号</th>
+					<!-- <th>邮箱</th> -->
+					<th>真实姓名</th>
+					<th>身份证</th>
+					<th>实名认证状态</th>
+					<th>实名认证时间</th>
+					<!-- <th>性别</th> -->
+					<th>注册时间</th>
+					<th>推荐人账号</th>
+				</tr>
+			</thead>
+			<tbody>
+				#foreach($user in ${userpage.result})
+				<tr>
+					<td>$!user.id</td>
+					<td>$!user.username</td>
+					<td>$!user.mobile</td>
+					<!-- <td>$!user.email</td> -->
+					<td>$!user.realname</td>
+					<td>$!user.idCard</td>
+					<td>
+					#if($!user.realVerifyStatus==0)
+						未认证
+					#elseif($!user.realVerifyStatus==1)
+						已认证
+					#elseif($!user.realVerifyStatus==2)
+						待审核
+					#end
+					</td>
+					#if($!user.realVerifyTime)
+					<td>$!dateTool.dateStr($!user.realVerifyTime, 'yyyy-MM-dd HH:mm:ss')</td>
+					#else
+					<td></td>
+					#end
+					<!-- <td>$!user.sex</td> -->
+					<td>$!dateTool.dateStr($!user.createdAt, 'yyyy-MM-dd')</td>
+					<td>$!user.inviteUser</td>
+				</tr>
+				#end
+			</tbody>
+		</table>
+		<b>
+		#if($!realVerifyStatus=='1')
+			已实名认证人数
+		#elseif($!realVerifyStatus=='0')
+			未实名认证人数
+		#elseif($!realVerifyStatus=='2')
+			待审核人数
+		#else
+			用户总数
+		#end
+		</b>
+		<font color="red">$!verifysize</font>
+		#pagination($userpage 'userForm')
+	</form>
+</div>
+
+<script type="text/javascript">
+	var xlsurl = ROOT_URL + '/admin/member/webuser.html?ctype=export';
+	function exportxls() {
+		var sou = "";
+		var username = $("#username").val();
+		if (username != null && username != "" && username != "undefine") {
+			sou += "&username=" + username;
+		}
+		var realname = $("#realname").val();
+		if (realname != null && realname != "" && realname != "undefine") {
+			sou += "&realname=" + realname;
+		}
+		var mobile = $("#mobile").val();
+		if (mobile != null && mobile != "" && mobile != "undefine") {
+			sou += "&mobile=" + mobile;
+		}
+		var realVerifyStatus = $("#realVerifyStatus").val();
+		if (realVerifyStatus != null) {
+			sou += "&realVerifyStatus=" + realVerifyStatus;
+		}
+		var startTime = $("#startTime").val();
+		if (startTime != null && startTime != "" && startTime != "undefine") {
+			sou += "&startTime=" + startTime;
+		}
+		var endTime = $("#endTime").val();
+		if (endTime != null && endTime != "" && endTime != "undefine") {
+			sou += "&endTime=" + endTime;
+		}
+		if (sou != "") {
+			location.href = xlsurl + sou;
+		} else {
+			location.href = xlsurl;
+		}
+	}
+</script>
+#footer()
